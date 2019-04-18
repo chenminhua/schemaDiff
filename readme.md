@@ -4,7 +4,9 @@ show difference between two database schema. One of these common scenarios could
 
 # installation
 
+```
 pip3 install schemaDiff==0.2
+```
 
 # usage
 
