@@ -39,7 +39,7 @@ class TableDiff:
     def get_defalut_clause(self, default_value):
         if (default_value is None):
             return ""
-        if (default_value is ""):
+        if (default_value == ""):
             return "DEFAULT ''"
         return "DEFAULT " + default_value
 
@@ -70,8 +70,10 @@ class TableDiff:
             print(diffTable)
 
 
-def highlight(s):
-    return '\033[31m' + s + '\033[0m'
+def highlight(s, color="red"):
+    if color == "red":
+	    return '\033[31m' + s + '\033[0m'
+    return '\033[32m' + s + '\033[0m'
 
 
 def diffSchema(schema1, schema2):
@@ -79,8 +81,9 @@ def diffSchema(schema1, schema2):
     diffTable = PrettyTable(["table_name", "d1", "d2"])
     for table_name in keys:
         if (schema1.get(table_name) is None) or (schema2.get(table_name) is None):
-            diffTable.add_row([table_name, (schema1.get(table_name) is None),
-                               (schema2.get(table_name) is None)])
+            d1_table_exist = highlight("Not Exist") if schema1.get(table_name) is None else highlight("Exist", "green")
+            d2_table_exist = highlight("Not Exist") if schema2.get(table_name) is None else highlight("Exist", "green")
+            diffTable.add_row([table_name, d1_table_exist, d2_table_exist])
         else:
             diff = TableDiff(table_name, schema1.get(
                 table_name), schema2.get(table_name))
